@@ -1,4 +1,5 @@
 import sqlite3
+from typing import Optional
 
 # Represent one row in items table
 class Item:
@@ -28,7 +29,6 @@ def init(database_file):
     """
     )
     db_conn.commit()
-    c.close()
     return db_conn
 
 
@@ -46,7 +46,7 @@ def insert_item(db_conn, title, url, category) -> None:
     c.close()
 
 # Get untweeted python story
-def get_untweeted_python_item(db_conn) -> Item:
+def get_untweeted_python_item(db_conn) -> Optional[Item]:
     c = db_conn.cursor()
     c.execute(
     """
@@ -63,6 +63,9 @@ def get_untweeted_python_item(db_conn) -> Item:
     result = c.fetchone()
     c.close()
 
+    if result is None:
+        return None
+
     item = Item(
         id=result[0],
         title=result[1],
@@ -71,4 +74,18 @@ def get_untweeted_python_item(db_conn) -> Item:
     )
 
     return item
+
+# Mark item as tweeted
+def mark_item_as_tweeted(db_conn, item_id) -> None:
+    c = db_conn.cursor()
+    c.execute(
+    """
+        UPDATE items
+        SET
+            is_tweeted=1
+        WHERE
+            id={}
+    """.format(item_id)
+    )
+    db_conn.commit()
 

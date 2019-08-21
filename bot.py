@@ -3,15 +3,16 @@ import sqlite3
 import tweepy
 from apscheduler.schedulers.blocking import BlockingScheduler
 
+import config
 import database
 import hacker_news
-import config
 
 scheduler = BlockingScheduler()
 
 @scheduler.scheduled_job("interval", minutes=5)
 def collect_python_stories():
-    print("Collecting the python stories ...")
+    print("[python] Collecting the python stories ...")
+
     # Initialize database
     db_conn = database.init(config.DATABASE_FILE)
 
@@ -26,17 +27,18 @@ def collect_python_stories():
                 category="python"
             )
             database.insert_item(db_conn, item)
-            print("Item {} inserted".format(item.url))
+            print("[python] Item {} inserted".format(item.url))
         except sqlite3.IntegrityError:
-            print("Item {} already exists".format(story.url))
+            print("[python] Item {} already exists".format(story.url))
         except Exception as e:
-            print("Insert item {} failed {}".format(story.url, e))
+            print("[python] Insert item {} failed {}".format(story.url, e))
 
     # Close the database connection
     db_conn.close()
 
 @scheduler.scheduled_job("cron", hour="*")
 def tweet_python():
+    print("[python] Tweeting ...")
     # Initialize database
     db_conn = database.init(config.DATABASE_FILE)
 
@@ -52,11 +54,20 @@ def tweet_python():
     twitter = tweepy.API(auth)
 
     # Get the tweet data
+    print("[python] Get the tweet data")
     item = database.get_untweeted_python_item(db_conn)
-    status = "{} {} #python".format(item.title, item.url)
+    if item is None:
+        print("[python] The tweet data is None")
+        db_conn.close()
+        return
 
     # Tweet the status
+    status = "{} {} #python".format(item.title, item.url)
     twitter.update_status(status=status)
+
+    # Mark item as tweeted
+    database.mark_item_as_tweeted(db_conn, item.id)
+    print("[python] Tweeted {}".format(item.url))
 
     # Close database conn
     db_conn.close()
