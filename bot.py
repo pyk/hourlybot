@@ -13,7 +13,7 @@ scheduler = BlockingScheduler()
 def collect_python_stories():
     print("Collecting the python stories ...")
     # Initialize database
-    db_conn = database.init()
+    db_conn = database.init(config.DATABASE_FILE)
 
     # Get python stories from hacker news
     hn_python_stories = hacker_news.get_python_top_stories()
@@ -38,7 +38,7 @@ def collect_python_stories():
 @scheduler.scheduled_job("cron", hour="*")
 def tweet_python():
     # Initialize database
-    db_conn = database.init()
+    db_conn = database.init(config.DATABASE_FILE)
 
     # Initialize twitter client
     auth = tweepy.OAuthHandler(
@@ -67,8 +67,9 @@ if __name__ == "__main__":
     if (config.PYTHON_ACCESS_TOKEN is None
         or config.PYTHON_ACCESS_TOKEN_SECRET is None
         or config.PYTHON_CONSUMER_KEY is None
-        or config.PYTHON_CONSUMER_SECRET is None):
-        raise ValueError("Twitter client config should be set")
+        or config.PYTHON_CONSUMER_SECRET is None
+        or config.DATABASE_FILE is None):
+        raise ValueError("Configuration should be set")
 
     # Start the scheduler
     print("Bot started ...")

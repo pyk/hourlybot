@@ -10,7 +10,7 @@ class Item:
         self.is_tweeted = is_tweeted
 
 # Setup and initialize database connection
-def init(database_file = "items.db"):
+def init(database_file):
     db_conn = sqlite3.connect(database_file)
     # Create table if not exists
     c = db_conn.cursor()

@@ -1,5 +1,7 @@
 from os import environ as env
 
+DATABASE_FILE = env.get("DATABASE_FILE", None)
+
 PYTHON_CONSUMER_KEY = env.get("PYTHON_CONSUMER_KEY", None)
 PYTHON_CONSUMER_SECRET = env.get("PYTHON_CONSUMER_SECRET", None)
 PYTHON_ACCESS_TOKEN = env.get("PYTHON_ACCESS_TOKEN", None)
