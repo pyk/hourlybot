@@ -1,0 +1,14 @@
+# Python env
+venv
+
+# Python cache
+__pycache__
+
+# VS Code stuff
+.vscode
+
+# Database files
+*.db
+
+# Script stuff
+*.sh
