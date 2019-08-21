@@ -4,7 +4,7 @@ After=multi-user.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /usr/bin/dummy_service.py
+ExecStart=/usr/bin/python3 /root/hourlybot/bot.py
 Restart=always
 EnvironmentFile=/root/hourlybot/config.env
 
