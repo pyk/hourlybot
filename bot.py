@@ -21,12 +21,7 @@ def collect_python_stories():
     for story in hn_python_stories:
         # Insert story to the database
         try:
-            item = database.Item(
-                title=story.title,
-                url=story.url,
-                category="python"
-            )
-            database.insert_item(db_conn, item)
+            database.insert_item(db_conn, story.title, story.url, story.category)
             print("[python] Item {} inserted".format(item.url))
         except sqlite3.IntegrityError:
             print("[python] Item {} already exists".format(story.url))
