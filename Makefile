@@ -21,5 +21,8 @@ status:
 log:
 	journalctl -r -u hourlybot.service
 
-.PHONY: test install start stop log status
+log-follow:
+	journalctl -f -u hourlybot.service
+
+.PHONY: test install start stop log log-follow status
 
