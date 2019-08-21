@@ -13,7 +13,7 @@ stop:
 	systemctl stop hourlybot.service
 
 log:
-	journalctl -u hourlybot.service
+	journalctl -r -f -u hourlybot.service
 
 .PHONY: test install start stop log
 
