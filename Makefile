@@ -12,8 +12,11 @@ start:
 stop:
 	systemctl stop hourlybot.service
 
+status:
+	systemctl status hourlybot.service
+
 log:
 	journalctl -r -f -u hourlybot.service
 
-.PHONY: test install start stop log
+.PHONY: test install start stop log status
 
