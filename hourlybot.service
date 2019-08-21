@@ -1,0 +1,12 @@
+[Unit]
+Description=Hourlybot
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /usr/bin/dummy_service.py
+Restart=always
+EnvironmentFile=/root/hourlybot/config.env
+
+[Install]
+WantedBy=multi-user.target
