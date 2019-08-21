@@ -22,7 +22,7 @@ def collect_python_stories():
         # Insert story to the database
         try:
             database.insert_item(db_conn, story.title, story.url, "python")
-            print("[python] Item {} inserted".format(item.url))
+            print("[python] Item {} inserted".format(story.url))
         except sqlite3.IntegrityError:
             print("[python] Item {} already exists".format(story.url))
         except Exception as e:
