@@ -16,7 +16,7 @@ status:
 	systemctl status hourlybot.service
 
 log:
-	journalctl -r -f -u hourlybot.service
+	journalctl -r -u hourlybot.service
 
 .PHONY: test install start stop log status
 
