@@ -6,6 +6,9 @@ install:
 	cp hourlybot.service /lib/systemd/system/
 	systemctl enable hourlybot.service
 
+uninstall:
+	systemctl disable hourlybot.service
+
 start:
 	systemctl start hourlybot.service
 
