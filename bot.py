@@ -129,12 +129,12 @@ def collect_rust_stories_from_hn():
 
 @scheduler.scheduled_job("interval", minutes=5)
 def collect_rust_stories_from_lobsters():
-    print("[rust][lobsters] Collecting the rust stories from hacker news ...")
+    print("[rust][lobsters] Collecting the rust stories from lobsters ...")
 
     # Initialize database
     db_conn = database.init(config.DATABASE_FILE)
 
-    # Get rust stories from hacker news
+    # Get rust stories from lobsters
     stories = source.get_rust_stories_from_lobsters()
     for story in stories:
         # Insert story to the database
