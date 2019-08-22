@@ -159,9 +159,9 @@ def get_stories_from_lobsters(keywords=None, min_score=2) -> List[Story]:
 
     # Get stories
     resp = requests.get("https://lobste.rs/newest.json")
-    stories = resp.json()
+    raw_stories = resp.json()
     stories = []
-    for raw_story in stories:
+    for raw_story in raw_stories:
         story = Story(
             url=raw_story.get("url", None),
             title=raw_story.get("title", None),
