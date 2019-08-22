@@ -20,6 +20,7 @@ PYTHON_KEYWORDS = [
     "scipy",
     "spacy",
     "cpython",
+    "pycon",
 ]
 
 # A list of machine learning related keywords

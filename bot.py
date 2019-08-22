@@ -171,7 +171,7 @@ def tweet_python():
 
     # Get the tweet data
     print("[python] Get the tweet data")
-    item = database.get_untweeted_python_item(db_conn)
+    item = database.get_untweeted_item(db_conn, "python")
     if item is None:
         print("[python] The tweet data is None")
         db_conn.close()
@@ -189,6 +189,41 @@ def tweet_python():
     db_conn.close()
 
 
+@scheduler.scheduled_job("cron", hour="*")
+def tweet_rust():
+    print("[rust] Tweeting ...")
+    # Initialize database
+    db_conn = database.init(config.DATABASE_FILE)
+
+    # Initialize twitter client
+    auth = tweepy.OAuthHandler(
+        config.RUST_CONSUMER_KEY, config.RUST_CONSUMER_SECRET
+    )
+    auth.set_access_token(
+        config.RUST_ACCESS_TOKEN, config.RUST_ACCESS_TOKEN_SECRET
+    )
+    twitter = tweepy.API(auth)
+
+    # Get the tweet data
+    print("[rust] Get the tweet data")
+    item = database.get_untweeted_item(db_conn, "rust")
+    if item is None:
+        print("[rust] The tweet data is None")
+        db_conn.close()
+        return
+
+    # Tweet the status
+    status = "{} {} #rustlang".format(item.title, item.url)
+    twitter.update_status(status=status)
+
+    # Mark item as tweeted
+    database.mark_item_as_tweeted(db_conn, item.id)
+    print("[rust] Tweeted {}".format(item.url))
+
+    # Close database conn
+    db_conn.close()
+
+
 if __name__ == "__main__":
     # Double check config
     if (
@@ -197,6 +232,10 @@ if __name__ == "__main__":
         or config.PYTHON_CONSUMER_KEY is None
         or config.PYTHON_CONSUMER_SECRET is None
         or config.DATABASE_FILE is None
+        or config.RUST_ACCESS_TOKEN is None
+        or config.RUST_ACCESS_TOKEN_SECRET is None
+        or config.RUST_CONSUMER_KEY is None
+        or config.RUST_CONSUMER_SECRET is None
     ):
         raise ValueError("Configuration should be set")
 

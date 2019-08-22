@@ -63,7 +63,7 @@ class TestDatabase(unittest.TestCase):
 
         # Test the function, make sure it returns the oldest
         # untweeted item
-        item = database.get_untweeted_python_item(db_conn)
+        item = database.get_untweeted_item(db_conn, "python")
         self.assertEqual(item.title, "second title")
         self.assertEqual(item.url, "second_url")
         self.assertEqual(item.category, "python")
