@@ -4,9 +4,6 @@ venv
 # Python cache
 __pycache__
 
-# VS Code stuff
-.vscode
-
 # Database files
 *.db
 
@@ -15,3 +12,9 @@ __pycache__
 
 # Env
 *.env
+
+# Mypy
+.mypy_cache
+
+# macOS Stuff
+.DS_Store

@@ -2,8 +2,8 @@ import unittest
 import database
 import sqlite3
 
-class TestDatabase(unittest.TestCase):
 
+class TestDatabase(unittest.TestCase):
     def test_insert_item(self):
         db_conn = database.init(database_file="insert_item_test.db")
         title = "Test title"
@@ -13,7 +13,9 @@ class TestDatabase(unittest.TestCase):
 
         # The content should exists in the database
         c = db_conn.cursor()
-        c.execute("SELECT title, url, category FROM items WHERE url='{}'".format(url))
+        c.execute(
+            "SELECT title, url, category FROM items WHERE url='{}'".format(url)
+        )
         result = c.fetchone()
 
         # Make sure it's correct
@@ -49,13 +51,14 @@ class TestDatabase(unittest.TestCase):
             ("third title", "third_url", "python", 0),
         ]
         c.executemany(
-        """
+            """
             INSERT INTO
                 items(title, url, category, is_tweeted)
             VALUES
                 (?,?,?,?)
         """,
-        items)
+            items,
+        )
         c.close()
 
         # Test the function, make sure it returns the oldest
@@ -78,13 +81,14 @@ class TestDatabase(unittest.TestCase):
             ("third title", "third_url", "python", 0),
         ]
         c.executemany(
-        """
+            """
             INSERT INTO
                 items(title, url, category, is_tweeted)
             VALUES
                 (?,?,?,?)
         """,
-        items)
+            items,
+        )
 
         # Get the ids
         c.execute("SELECT id FROM items WHERE is_tweeted=0")
