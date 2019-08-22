@@ -19,6 +19,8 @@ def collect_python_stories_from_hn():
 
     # Get python stories from hacker news
     stories = source.get_python_stories_from_hn()
+    if len(stories) == 0:
+        print("[python][hn] No stories")
     for story in stories:
         # Insert story to the database
         try:
@@ -42,6 +44,8 @@ def collect_python_stories_from_lobsters():
 
     # Get python stories from lobsters
     stories = source.get_python_stories_from_lobsters()
+    if len(stories) == 0:
+        print("[python][lobsters] No stories")
     for story in stories:
         # Insert story to the database
         try:
@@ -71,6 +75,8 @@ def collect_ml_stories_from_hn():
 
     # Get ml stories from hacker news
     stories = source.get_ml_stories_from_hn()
+    if len(stories) == 0:
+        print("[ml][hn] No stories")
     for story in stories:
         # Insert story to the database
         try:
@@ -94,6 +100,8 @@ def collect_ml_stories_from_lobsters():
 
     # Get ml stories from lobsters
     stories = source.get_ml_stories_from_lobsters()
+    if len(stories) == 0:
+        print("[ml][lobsters] No stories")
     for story in stories:
         # Insert story to the database
         try:
@@ -119,6 +127,8 @@ def collect_rust_stories_from_hn():
 
     # Get rust stories from hacker news
     stories = source.get_rust_stories_from_hn()
+    if len(stories) == 0:
+        print("[rust][hn] No stories")
     for story in stories:
         # Insert story to the database
         try:
@@ -142,6 +152,8 @@ def collect_rust_stories_from_lobsters():
 
     # Get rust stories from lobsters
     stories = source.get_rust_stories_from_lobsters()
+    if len(stories) == 0:
+        print("[rust][lobsters] No stories")
     for story in stories:
         # Insert story to the database
         try:
