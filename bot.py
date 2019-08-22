@@ -35,22 +35,28 @@ def collect_python_stories_from_hn():
 
 @scheduler.scheduled_job("interval", minutes=5)
 def collect_python_stories_from_lobsters():
-    print("[python][hn] Collecting the python stories from hacker news ...")
+    print("[python][lobsters] Collecting the python stories from lobsters ...")
 
     # Initialize database
     db_conn = database.init(config.DATABASE_FILE)
 
-    # Get python stories from hacker news
+    # Get python stories from lobsters
     stories = source.get_python_stories_from_lobsters()
     for story in stories:
         # Insert story to the database
         try:
             database.insert_item(db_conn, story.title, story.url, "python")
-            print("[python][hn] Item {} inserted".format(story.url))
+            print("[python][lobsters] Item {} inserted".format(story.url))
         except sqlite3.IntegrityError:
-            print("[python][hn] Item {} already exists".format(story.url))
+            print(
+                "[python][lobsters] Item {} already exists".format(story.url)
+            )
         except Exception as e:
-            print("[python][hn] Insert item {} failed {}".format(story.url, e))
+            print(
+                "[python][lobsters] Insert item {} failed {}".format(
+                    story.url, e
+                )
+            )
 
     # Close the database connection
     db_conn.close()
@@ -81,12 +87,12 @@ def collect_ml_stories_from_hn():
 
 @scheduler.scheduled_job("interval", minutes=5)
 def collect_ml_stories_from_lobsters():
-    print("[ml][lobsters] Collecting the ml stories from hacker news ...")
+    print("[ml][lobsters] Collecting the ml stories from lobsters ...")
 
     # Initialize database
     db_conn = database.init(config.DATABASE_FILE)
 
-    # Get ml stories from hacker news
+    # Get ml stories from lobsters
     stories = source.get_ml_stories_from_lobsters()
     for story in stories:
         # Insert story to the database
