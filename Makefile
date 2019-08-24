@@ -1,6 +1,7 @@
 test:
 	rm -f *test.db
 	python database_test.py
+	python source_test.py
 
 install:
 	cp hourlybot.service /lib/systemd/system/

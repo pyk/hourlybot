@@ -99,19 +99,39 @@ def get_story_from_hn(item_id) -> Optional[Story]:
     return story
 
 
+# Generate bigrams from list of unigrams
+def get_bigram(unigrams: List[str]) -> List[str]:
+    unigram_size = len(unigrams)
+    current_i = 0
+    next_i = current_i + 1
+    bigrams = []
+    while next_i < unigram_size:
+        bigram = "{} {}".format(unigrams[current_i], unigrams[next_i])
+        current_i += 1
+        next_i = current_i + 1
+        bigrams.append(bigram)
+    return bigrams
+
+
+def is_keywords_exists(text: str, keywords: List[str]) -> bool:
+    # If keywords is empty, returns True for all story
+    if len(keywords) == 0:
+        return True
+
+    unigrams = text.strip().split()
+    bigrams = get_bigram(unigrams)
+    unigrams_set = set(unigrams)
+    bigrams_set = set(bigrams)
+    for keyword in keywords:
+        # Check the keyword
+        if keyword in unigrams_set or keyword in bigrams_set:
+            return True
+    return False
+
+
 # Get specified stories based on the keywords from Hacker News
 # https://news.ycombinator.com/newest
-def get_stories_from_hn(keywords=None, min_score=2) -> List[Story]:
-    # Check wether the story is OK to append the list
-    def is_ok(story):
-        # If keywords is None or empty, returns True for all story
-        if keywords is None or len(keywords) == 0:
-            return True
-        for keyword in keywords:
-            if keyword in story.normalize_title():
-                return True
-        return False
-
+def get_stories_from_hn(keywords: List[str], min_score=2) -> List[Story]:
     # Get new story ids
     resp = requests.get(
         "https://hacker-news.firebaseio.com/v0/newstories.json"
@@ -132,7 +152,7 @@ def get_stories_from_hn(keywords=None, min_score=2) -> List[Story]:
             continue
         # Replace Show HN: if any
         story.title = story.title.replace("Show HN: ", "")
-        if is_ok(story):
+        if is_keywords_exists(story.normalize_title(), keywords=keywords):
             stories.append(story)
         else:
             continue
@@ -146,16 +166,7 @@ def get_stories_from_hn(keywords=None, min_score=2) -> List[Story]:
 
 # Get specified stories based on the keywords from Lobsters
 # https://lobste.rs/newest
-def get_stories_from_lobsters(keywords=None, min_score=2) -> List[Story]:
-    # Check wether the story is OK to append the list
-    def is_ok(story):
-        # If keywords is None or empty, returns True for all story
-        if keywords is None or len(keywords) == 0:
-            return True
-        for keyword in keywords:
-            if keyword in story.normalize_title():
-                return True
-        return False
+def get_stories_from_lobsters(keywords: List[str], min_score=2) -> List[Story]:
 
     # Get stories
     resp = requests.get("https://lobste.rs/newest.json")
@@ -173,7 +184,7 @@ def get_stories_from_lobsters(keywords=None, min_score=2) -> List[Story]:
         # Skip story if below minimal score
         if story.score < min_score:
             continue
-        if is_ok(story):
+        if is_keywords_exists(story.normalize_title(), keywords=keywords):
             stories.append(story)
         else:
             continue
